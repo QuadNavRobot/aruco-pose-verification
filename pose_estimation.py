@@ -1,9 +1,10 @@
 import numpy as np
 import cv2
 
+video_path = 'videos/test.webm'
+ip_camera = 'http://172.16.0.109:8080/video'
 calibration_matrix_path = 'calibration_matrix.npy'
 distortion_coefficients_path = 'distortion_coefficients.npy'
-url_camera = 'http://172.16.0.109:8080/video'
 
 aruco_dict_type = cv2.aruco.DICT_4X4_50
 
@@ -37,8 +38,6 @@ def pose_esitmation(frame, aruco_dict_type, matrix_coefficients, distortion_coef
                 first_rvec = rvec
                 first_tvec = tvec
                 first_angles = calculate_euler_angles(first_rvec)
-                print(f"First detected rvec: {first_rvec}")
-                print(f"First detected tvec: {first_tvec}")
             cv2.aruco.drawAxis(frame, matrix_coefficients, distortion_coefficients, first_rvec, first_tvec, 0.018)
 
             # Draw a square around the markers
@@ -115,8 +114,9 @@ if __name__ == '__main__':
     
     k = np.load(calibration_matrix_path)
     d = np.load(distortion_coefficients_path)
-
-    video = cv2.VideoCapture(url_camera)
+    
+    #video = cv2.VideoCapture(ip_camera)  # For real-time video
+    video = cv2.VideoCapture(video_path)  # For video file
 
     while True:
         ret, frame = video.read()
